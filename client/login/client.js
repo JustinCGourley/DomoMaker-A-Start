@@ -55,7 +55,7 @@ const LoginWindow = (props) => {
 const SignupWindow = (props) => {
     return (
         <form id = "signupForm" name="signupForm"
-            onSubmit={handleLogin}
+            onSubmit={handleSignup}
             action="/signup"
             method="POST"
             className="mainForm"
@@ -67,7 +67,7 @@ const SignupWindow = (props) => {
         <label htmlFor="pass2">Password: </label>
         <input id="pass2" type="password" name="pass2" placeholder="retype password"/>
         <input type="hidden" name="_csrf" value={props.csrf}/>
-        <input className="formSubmit" type="submit" value="Sign in"/>
+        <input className="formSubmit" type="submit" value="Sign Up"/>
         </form>
     );
 }
