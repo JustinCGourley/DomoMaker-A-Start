@@ -5,7 +5,7 @@ var handleDomo = function handleDomo(e) {
 
     $("#domoMessage").animate({ width: 'hide' }, 350);
 
-    if ($("#domoName").val() == '' || $("#domoAge").val() == '') {
+    if ($("#domoName").val() == '' || $("#domoAge").val() == '' || $('#domoDesc').val() == '') {
         handleError("All fields are required");
         return false;
     }
@@ -13,6 +13,18 @@ var handleDomo = function handleDomo(e) {
     sendAjax('POST', $("#domoForm").attr("action"), $("#domoForm").serialize(), function () {
         loadDomosFromServer();
     });
+    return false;
+};
+
+var handleDelete = function handleDelete(e, domo) {
+
+    var token = document.querySelector('#csrfToken').value;
+    var data = "id=" + e._id + "&name=" + e.name + "&age=" + e.age + "&description=" + e.description + "&_csrf=" + token;
+
+    sendAjax('POST', '/deleteDomo', data, function () {
+        loadDomosFromServer();
+    });
+
     return false;
 };
 
@@ -38,7 +50,13 @@ var DomoForm = function DomoForm(props) {
             "Age: "
         ),
         React.createElement("input", { id: "domoAge", type: "text", name: "age", placeholder: "Domo Age" }),
-        React.createElement("input", { type: "hidden", name: "_csrf", value: props.csrf }),
+        React.createElement(
+            "label",
+            { id: "domoDescLabel", htmlFor: "description" },
+            "Description: "
+        ),
+        React.createElement("input", { id: "domoDescription", type: "text", name: "description", placeholder: "Domo Description" }),
+        React.createElement("input", { id: "csrfToken", type: "hidden", name: "_csrf", value: props.csrf }),
         React.createElement("input", { className: "makeDomoSubmit", type: "submit", value: "Make Domo" })
     );
 };
@@ -72,7 +90,16 @@ var DomoList = function DomoList(props) {
                 { className: "domoAge" },
                 "Age: ",
                 domo.age
-            )
+            ),
+            React.createElement(
+                "h3",
+                { className: "domoDesc" },
+                "Description: ",
+                domo.description
+            ),
+            React.createElement("img", { src: "/assets/img/trashcan.png", alt: "trash", className: "domoDelete", onClick: function onClick() {
+                    return handleDelete(domo);
+                }, name: "test" })
         );
     });
 

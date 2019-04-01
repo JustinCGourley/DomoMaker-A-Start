@@ -3,7 +3,7 @@ const models = require('../models');
 const Account = models.Account;
 
 const loginPage = (req, res) => {
-  res.render('login', {csrfToken: req.csrfToken() });
+  res.render('login', { csrfToken: req.csrfToken() });
 };
 
 const logout = (req, res) => {
@@ -84,10 +84,10 @@ const getToken = (request, response) => {
   };
 
   res.json(csrfToken);
-}
+};
 
 module.exports.loginPage = loginPage;
 module.exports.login = login;
 module.exports.logout = logout;
 module.exports.signup = signup;
-module.exports.getToken = getToken; 
+module.exports.getToken = getToken;

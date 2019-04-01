@@ -3,7 +3,7 @@ const handleDomo = (e) => {
 
     $("#domoMessage").animate({width: 'hide'},350);
 
-    if ($("#domoName").val() == '' || $("#domoAge").val() == ''){
+    if ($("#domoName").val() == '' || $("#domoAge").val() == '' || $('#domoDesc').val() == ''){
         handleError("All fields are required");
         return false;
     }
@@ -13,6 +13,18 @@ const handleDomo = (e) => {
     });
     return false;
 };
+
+const handleDelete = (e, domo) => {
+
+    let token = document.querySelector('#csrfToken').value;
+    let data = `id=${e._id}&name=${e.name}&age=${e.age}&description=${e.description}&_csrf=${token}`;
+
+    sendAjax('POST', '/deleteDomo', data, function(){
+        loadDomosFromServer();
+    });
+
+    return false;
+}
 
 const DomoForm = (props) => {
     return (
@@ -28,7 +40,9 @@ const DomoForm = (props) => {
         <input id="domoName" type="text" name="name" placeholder="Domo Name"/>
         <label htmlFor="age">Age: </label>
         <input id="domoAge" type="text" name="age" placeholder="Domo Age"/>
-        <input type="hidden" name="_csrf" value={props.csrf} />
+        <label id= "domoDescLabel" htmlFor="description">Description: </label>
+        <input id="domoDescription" type="text" name="description" placeholder="Domo Description"/>
+        <input id="csrfToken" type="hidden" name="_csrf" value={props.csrf} />
         <input className="makeDomoSubmit" type="submit" value="Make Domo"/>
         </form>
     );
@@ -49,6 +63,8 @@ const DomoList = function(props) {
             <img src="/assets/img/domoface.jpeg" alt="domo face" className="domoFace" />
             <h3 className="domoName">Name: {domo.name}</h3>
             <h3 className="domoAge">Age: {domo.age}</h3>
+            <h3 className="domoDesc">Description: {domo.description}</h3>
+            <img src="/assets/img/trashcan.png" alt="trash" className="domoDelete" onClick={() => handleDelete(domo)} name="test"/>
             </div>
         );
     });
